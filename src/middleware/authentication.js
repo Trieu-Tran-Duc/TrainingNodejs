@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const response = require("../utils/response");
+const response = require("../helper/response");
 
 module.exports = (req, res, next) => {
 
@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
     req.user = jwt.verify(token, process.env.JWT_SECRET);
     next();
 
-  } catch {
+  } catch (err) {
 
     if (err.name === "TokenExpiredError") {
       return response.unauthorized(res, 401, "Token expired");
