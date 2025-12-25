@@ -1,0 +1,45 @@
+// Additional colors
+$deep_navy: #022873;
+$royal_blue: #3663DF;
+$dark_blue: #173F73;
+$pale_blue: #EDF1F7;
+$light_gray: #D9D2D6;
+$medium_gray: #A3A0A6;
+$dark_gray: #6E6B70;
+$pastel_pink: #D97398;
+
+:root {
+  --deep_navy: #022873;
+  --royal_blue: #3663DF;
+  --dark_blue: #173F73;
+  --pale_blue: #EDF1F7;
+  --light_gray: #D9D2D6;
+  --medium_gray: #A3A0A6;
+  --dark_gray: #6E6B70;
+  --pastel_pink: #D97398;
+}
+
+.color_deep_navy {
+  color: var(--deep_navy);
+}
+.color_royal_blue {
+  color: var(--royal_blue);
+}
+.color_dark_blue {
+  color: var(--dark_blue);
+}
+.color_pale_blue {
+  color: var(--pale_blue);
+}
+.color_light_gray {
+  color: var(--light_gray);
+}
+.color_medium_gray {
+  color: var(--medium_gray);
+}
+.color_dark_gray {
+  color: var(--dark_gray);
+}
+.color_pastel_pink {
+  color: var(--pastel_pink);
+}
