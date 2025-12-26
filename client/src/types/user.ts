@@ -9,7 +9,11 @@ export interface LoginRequest {
   password: string
 }
 
-export interface LoginResponse {
+export interface LoginResponse extends ResponseData {
   success: boolean
   user: User
+}
+
+export interface ResponseData {
+  message?: string
 }

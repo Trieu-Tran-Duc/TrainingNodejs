@@ -10,14 +10,14 @@ class AuthService {
 
         const user = users.find(u => u.username === username);
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            throw new ErrorHandler("Invalid username or password", 401);
+            throw new ErrorHandler("Invalid username or password", 404);
         }
 
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
 
         user.refreshToken = refreshToken;
-        return { accessToken, refreshToken };
+        return { accessToken, refreshToken, user: { id: user.id, username: user.username, role: user.role } };
     }
 
     async refreshToken(oldRefreshToken) {
@@ -38,7 +38,7 @@ class AuthService {
             const newRefreshToken = generateRefreshToken(user);
 
             user.refreshToken = newRefreshToken;
-            return { newAccessToken };
+            return { newAccessToken, newRefreshToken };
 
         } catch (err) {
             throw new ErrorHandler("Refresh token expired", 403);

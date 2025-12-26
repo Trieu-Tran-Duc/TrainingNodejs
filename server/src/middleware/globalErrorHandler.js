@@ -2,8 +2,6 @@ const response = require("../helper/response");
 const ErrorHandler = require("../helper/errorHandler");
 
 function errorHandler(err, req, res, next) {
-console.log("Global error handler invoked");
-
     if (err instanceof ErrorHandler) {
         return response.error(res, {
             code: err.statusCode,
@@ -11,7 +9,6 @@ console.log("Global error handler invoked");
         });
     }
     
-    console.error(err); 
     return response.serverError(res, err.message);
 }
 

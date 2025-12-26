@@ -2,63 +2,80 @@ import { defineStore } from 'pinia'
 import type { User, LoginRequest } from '../types/user'
 import { loginApi } from '../services'
 import router from '../router'
+import { ROLE } from '../helper/EnumSystem'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    stateCurrentUser: null as User | null,
-    stateIsAdmin: false,
+    currentUser: null as User | null,
+    isAdmin: false,
+    isLoggedIn: false,
     error: '' as string
   }),
   getters: {
-    isLoggedIn: (state) => !!state.stateCurrentUser,
-    isAdmin: (state) => state.stateIsAdmin,
-    currentUser: (state) => state.stateCurrentUser
+    getCurrentUser: (state) => state.currentUser,
+    getIsAdmin: (state) => state.isAdmin,
+    getIsLoggedIn: (state) => state.isLoggedIn,
+    getError: (state) => state.error
   },
   actions: {
     async login(payload: LoginRequest) {
       this.error = ''
       try {
         const response = await loginApi(payload)
-        this.stateCurrentUser = response.user
-        this.stateIsAdmin = response.user.role === 'admin'
-        localStorage.setItem('user', JSON.stringify(response.user))
 
-        if (response.user.role === 'admin') {
-          router.push('/admin')
-        } else {
-          router.push('/user')
+        if (!response || !response.success) {
+          this.error = response?.message || 'Login failed'
+          this.isLoggedIn = false
+          return
         }
 
+        this.currentUser = response.user
+        this.isAdmin = response.user.role === ROLE.ADMIN
+        this.isLoggedIn = true
+        localStorage.setItem('user', JSON.stringify(response.user))
+
+        router.push(this.isAdmin ? '/admin' : '/user')
+
       } catch (err: unknown) {
-        this.error = (err as Error).message
-      } 
+
+        if (err instanceof Error) {
+          this.error = 'Something went wrong'
+        } else {
+          this.error = 'An unexpected error occurred'
+        }
+        router.push({ path: '/error', query: { message: this.error } })
+
+        this.isLoggedIn = false
+      }
     },
+
     async refreshToken() {
-      // const res = await api.post('/auth/refresh')
-      // this.user = res.data.user
       return null
     },
+
     logout() {
-      this.stateCurrentUser = null
-      this.stateIsAdmin = false
+      this.currentUser = null
+      this.isAdmin = false
+      this.isLoggedIn = false
       localStorage.removeItem('user')
       router.push('/login')
     },
+
     loadUserFromStorage() {
       const userStr = localStorage.getItem('user')
       if (userStr) {
         try {
-          const user = JSON.parse(userStr) as User
-          this.stateCurrentUser = user
-          this.stateIsAdmin = user.role === 'admin'
+          const user: User = JSON.parse(userStr)
+          this.currentUser = user
+          this.isAdmin = user.role === ROLE.ADMIN
+          this.isLoggedIn = true
         } catch (err) {
           console.error('Failed to parse user from localStorage', err)
-          this.stateCurrentUser = null
-          this.stateIsAdmin = false
-          localStorage.removeItem('user')
+          this.logout() 
         }
       } else {
-        this.stateIsAdmin = false
+        this.isAdmin = false
+        this.isLoggedIn = false
       }
     }
   }

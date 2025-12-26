@@ -32,13 +32,16 @@
       />
         </v-form>
       </v-card-text>
+      <v-card-text class="justify-center">
+        <span class="login-sub-title" v-if="errorMessages">{{ errorMessages }}</span>
+        </v-card-text>  
     </v-card>
   </v-container>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { VTextField, VButton } from '../components'
 import { useAuthStore, useLoadingStore } from '../stores'
 
@@ -47,27 +50,45 @@ export default defineComponent({
   setup() {
     const password = ref('')
     const username = ref('')
-    
+    const errorMessages = ref('')
     const authStore = useAuthStore()
     const loadingStore = useLoadingStore()
 
     loadingStore.showLoading()
     const minLengthRule = (value: string | number) =>
-      (String(value).length >= 5) || 'Username must be at least 5 characters'
+      (String(value).length >= 4) || 'Username must be at least 4 characters'
 
     const noSpacesRule = (value: string | number) =>
       (!/\s/.test(String(value))) || 'Username cannot contain spaces'
 
-    const login = () => {
-      authStore.login({ username: username.value, password: password.value })
+     const login = async () => {
+      errorMessages.value = ''
+      loadingStore.showLoading()
+
+      try {
+        await authStore.login({ username: username.value, password: password.value })
+        if (!authStore.isLoggedIn) {
+          errorMessages.value = authStore.getError
+        }
+      }  finally {
+        loadingStore.hideLoading()
+      }
     }
     loadingStore.hideLoading()
+    watch(
+      () => authStore.getError,
+      (newError) => {
+        errorMessages.value = newError ?? ''
+      }
+    )
+
     return { 
       username, 
       password, 
       minLengthRule, 
       noSpacesRule, 
-      login 
+      login,
+      errorMessages
     }
   }
 })

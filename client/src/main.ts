@@ -28,6 +28,11 @@ const vuetify = createVuetify({
 
 const app = createApp(App)
 
+app.config.errorHandler = (err, instance, info) => {
+  console.error('Global error:', err, info)
+  router.push({ path: '/error', query: { message: err instanceof Error ? err.message : 'Unknown error' } })
+}
+
 app.use(createPinia())
 app.use(router)
 app.use(vuetify)

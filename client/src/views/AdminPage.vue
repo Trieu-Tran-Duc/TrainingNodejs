@@ -1,20 +1,44 @@
 <template>
   <div>
     <h2>Admin Page</h2>
-    <p>Chỉ dành cho admin</p>
+    <p>hello {{ messageInfo }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { useAuthStore } from '../stores'
+import { defineComponent, onMounted, ref } from 'vue'
+import { useAuthStore, useAdminStore, useLoadingStore } from '../stores'
 
 export default defineComponent({
   setup() {
+    const messageInfo = ref('')
     const authStore = useAuthStore()
-    console.log('Is Admin:', authStore.isAdmin)
+    const loadingStore = useLoadingStore()
+    const adminStore = useAdminStore()
+
+    loadingStore.showLoading()
+   
+     const fetchAdminInfo = async () => {
+      loadingStore.showLoading()
+
+      try {
+        const response = await adminStore.getAdminInformation()
+        messageInfo.value = response.message
+      }  finally {
+        loadingStore.hideLoading()
+      }
+    }
+
+    onMounted( async () => {
+      await fetchAdminInfo()
+    })
+
+    loadingStore.hideLoading()
+
+   
     return {
-      authStore
+      authStore,
+      messageInfo
     }
   }
 })

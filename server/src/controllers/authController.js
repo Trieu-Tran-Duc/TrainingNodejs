@@ -5,8 +5,16 @@ const AuthService = require("../services/authService");
 */
 const login = async (req, res) => {
   const { username, password } = req.body;
-  const { accessToken, refreshToken } = await AuthService.login(username, password);
-  return response.success(res, { accessToken, refreshToken });
+  const { accessToken, refreshToken, user } = await AuthService.login(username, password);
+  
+  res.cookie('accessToken', accessToken, {
+    httpOnly: true,       
+    secure: false,       
+    sameSite: 'lax',      
+    maxAge: 24 * 60 * 60 * 1000
+  })
+
+  return response.success(res, { user });
   
 };
 
@@ -15,8 +23,16 @@ const login = async (req, res) => {
 */
 const refreshToken = async (req, res) => {
   const { oldRefreshToken } = req.body;
-  var { newAccessToken } = await AuthService.refreshToken(oldRefreshToken);
-  return response.success(res, { accessToken: newAccessToken });
+  var { newAccessToken, newRefreshToken } = await AuthService.refreshToken(oldRefreshToken);
+  
+  res.cookie('accessToken', newAccessToken, {
+    httpOnly: true,       
+    secure: false,       
+    sameSite: 'lax',      
+    maxAge: 24 * 60 * 60 * 1000
+  })
+
+  return response.success(res, { refreshToken: newRefreshToken });
 
 };
 
