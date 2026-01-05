@@ -1,6 +1,10 @@
 <template>
   <v-app>
-    <SideMenu v-if="auth.isLoggedIn" />
+     <SideMenu
+      v-if="auth.isLoggedIn"
+      v-model:drawer="drawer"
+      v-model:rail="rail"
+    />
 
     <v-main :style="mainStyle">
       <router-view />
@@ -11,14 +15,13 @@
 <script lang="ts" setup>
 import SideMenu from "../components/SideMenu.vue";
 import { useAuthStore } from "../stores";
-import { computed, ref } from "vue";
-
-const rail = ref(false);
+import { ref, computed } from "vue";
 const drawer = ref(true);
+const rail = ref(false);
 const auth = useAuthStore();
 
 const mainStyle = computed(() => ({
-  //marginLeft: drawer.value ? (rail.value ? "36px" : "20px") : "0px",
+     marginLeft: drawer.value ? (rail.value ? "56px" : "230px") : "0px",
   transition: "margin-left 0.3s ease",
 }));
 
