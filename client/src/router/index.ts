@@ -6,12 +6,42 @@ import UserPage from '../views/UserPage.vue'
 import { useAuthStore } from '../stores'
 import { ROLE } from '../helper/EnumSystem'
 import ErrorPage from '../views/ErrorPage.vue'
+import MainLayout from '../components/MainLayout.vue'
 
 const routes = [
-  { path: '/', name: 'Login', component: LoginPage },
-  { path: '/admin', name: 'Admin', component: AdminPage, meta: { requiresAuth: true, role: ROLE.ADMIN } },
-  { path: '/user', name: 'User', component: UserPage, meta: { requiresAuth: true, role: ROLE.USER } },
+  {
+    path: "/login",
+    name: "Login",
+    component: LoginPage,
+  },
+  {
+    path: "/",
+    component: MainLayout, 
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: "admin",
+        name: "Admin",
+        component: AdminPage,
+        meta: { role: ROLE.ADMIN },
+      },
+      {
+        path: "user",
+        name: "User",
+        component: UserPage,
+        meta: { role: ROLE.USER },
+      },
+      {
+        path: "error",
+        name: "Error",
+        component: ErrorPage,
+        props: true,
+      },
+      { path: "", redirect: "/login" }
+    ],
+  },
   { path: '/error', component: ErrorPage, props: true },
+  { path: "/:pathMatch(.*)*", redirect: "/login" },
 ]
 
 const router = createRouter({
@@ -26,16 +56,15 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth) {
     
     if (!authStore.isLoggedIn) {
-      return next('/')
+      return next('/login')
     }
 
     type Role = typeof ROLE[keyof typeof ROLE]
     const currentRole: Role = authStore.isAdmin ? ROLE.ADMIN : ROLE.USER
 
     if (to.meta.role && to.meta.role !== currentRole) {
-      return next('/')
+      return next('/login')
     }
-
   }
 
   next()

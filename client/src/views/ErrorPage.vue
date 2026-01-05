@@ -21,7 +21,7 @@ export default defineComponent({
     const router = useRouter()
 
     const goHome = () => {
-      router.push('/')
+      router.push('/login')
     }
 
     return {
