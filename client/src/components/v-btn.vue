@@ -17,7 +17,7 @@
 import type { PropType } from 'vue'
 
 defineProps({
-  label: { type: String as PropType<string>, default: 'Button' },
+  label: { type: String as PropType<string>, default: '' },
   color: { type: String as PropType<string>, default: 'primary' },
   variant: { type: String as PropType<'elevated' | 'flat' | 'outlined' | 'text' | 'tonal' | 'plain'>, default: 'tonal' },
   size: { type: String as PropType<'small' | 'medium' | 'large'>, default: 'medium' },

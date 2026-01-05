@@ -21,7 +21,7 @@ const rail = ref(false);
 const auth = useAuthStore();
 
 const mainStyle = computed(() => ({
-     marginLeft: drawer.value ? (rail.value ? "56px" : "230px") : "0px",
+  marginLeft: "20px",
   transition: "margin-left 0.3s ease",
 }));
 

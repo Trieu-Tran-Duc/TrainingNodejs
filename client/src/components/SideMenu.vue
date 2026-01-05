@@ -14,9 +14,8 @@
     </v-list-item>
 
     <template #append>
-      <v-btn icon variant="text" @click="toggleRail">
-        <v-icon>{{ rail ? "mdi-chevron-right" : "mdi-chevron-left" }}</v-icon>
-      </v-btn>
+      <VButton :prepend-icon="rail ? 'mdi-chevron-double-right' : 'mdi-chevron-double-left'" @click="toggleRail" class="custom-toggle">
+</VButton>
     </template>
 
     <v-divider />
@@ -38,6 +37,7 @@
 import { ref, computed } from "vue";
 import { useAuthStore } from "../stores";
 import { menuItems } from "../types/menu";
+import { VButton } from '../components'
 
 
 const authStore = useAuthStore();
@@ -54,13 +54,13 @@ const rail = ref(props.rail);
 
 const toggleRail = () => {
   rail.value = !rail.value;
-  emit("update:rail", rail.value); // đồng bộ với MainLayout
+  emit("update:rail", rail.value);
 };
 
 const filteredMenu = computed(() => {
   if (!authStore.getIsLoggedIn) return [];
   return menuItems.filter((item) =>
-    item.roles.includes('admin')
+    item.roles.includes(authStore.role)
   );
 });
 </script>
@@ -76,5 +76,14 @@ const filteredMenu = computed(() => {
   }
 
   transition: width 0.3s ease;
+}
+.custom-toggle {
+  border: 1px solid var(--white) !important;
+  border-radius: 0px;
+  font-weight: 600;
+  height: 40px !important;
+  text-transform: uppercase;
+  transition: width 0.3s ease;
+  color: var(--dark_gray) !important;
 }
 </style>

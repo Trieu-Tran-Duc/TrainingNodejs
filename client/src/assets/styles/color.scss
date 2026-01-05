@@ -7,6 +7,7 @@ $light_gray: #D9D2D6;
 $medium_gray: #A3A0A6;
 $dark_gray: #6E6B70;
 $pastel_pink: #D97398;
+$white: #FFFFFF;
 
 :root {
   --deep_navy: #022873;
@@ -17,6 +18,7 @@ $pastel_pink: #D97398;
   --medium_gray: #A3A0A6;
   --dark_gray: #6E6B70;
   --pastel_pink: #D97398;
+  --white: #FFFFFF;
 }
 
 .color_deep_navy {
@@ -43,3 +45,6 @@ $pastel_pink: #D97398;
 .color_pastel_pink {
   color: var(--pastel_pink);
 }
+.color_white {
+  color: var(--white);
+} 

@@ -9,7 +9,8 @@ export const useAuthStore = defineStore('auth', {
     currentUser: null as User | null,
     isAdmin: false,
     isLoggedIn: false,
-    error: '' as string
+    error: '' as string,
+    role: '' as string
   }),
   getters: {
     getCurrentUser: (state) => state.currentUser,
@@ -32,6 +33,7 @@ export const useAuthStore = defineStore('auth', {
         this.currentUser = response.user
         this.isAdmin = response.user.role === ROLE.ADMIN
         this.isLoggedIn = true
+        this.role = response.user.role
         localStorage.setItem('user', JSON.stringify(response.user))
 
         router.push(this.isAdmin ? '/admin' : '/user')
@@ -57,6 +59,7 @@ export const useAuthStore = defineStore('auth', {
       this.currentUser = null
       this.isAdmin = false
       this.isLoggedIn = false
+      this.role = ''
       localStorage.removeItem('user')
       router.push('/login')
     },
@@ -69,6 +72,7 @@ export const useAuthStore = defineStore('auth', {
           this.currentUser = user
           this.isAdmin = user.role === ROLE.ADMIN
           this.isLoggedIn = true
+          this.role = user.role
         } catch (err) {
           console.error('Failed to parse user from localStorage', err)
           this.logout() 

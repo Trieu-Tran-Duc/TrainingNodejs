@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background-color:chartreuse ;">
     <h2>Admin Page</h2>
     <p>hello {{ messageInfo }}</p>
   </div>
@@ -18,7 +18,7 @@ export default defineComponent({
 
     loadingStore.showLoading()
    
-     const fetchAdminInfo = async () => {
+      const fetchAdminInfo = async () => {
       loadingStore.showLoading()
 
       try {
@@ -34,7 +34,6 @@ export default defineComponent({
     })
 
     loadingStore.hideLoading()
-
    
     return {
       authStore,

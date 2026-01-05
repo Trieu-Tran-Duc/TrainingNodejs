@@ -1,12 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import LoginPage from '../views/LoginPage.vue'
-import AdminPage from '../views/AdminPage.vue'
-import UserPage from '../views/UserPage.vue'
 import { useAuthStore } from '../stores'
 import { ROLE } from '../helper/EnumSystem'
-import ErrorPage from '../views/ErrorPage.vue'
 import MainLayout from '../components/MainLayout.vue'
+
+import {
+  LoginPage,
+  AdminPage,
+  UserPage,
+  ErrorPage,
+  DashboardPage,
+  ScannerPage
+} from '../views/'
 
 const routes = [
   {
@@ -32,6 +37,18 @@ const routes = [
         meta: { role: ROLE.USER },
       },
       {
+        path: "scanner",
+        name: "Scanner",
+        component: ScannerPage,
+        meta: { role: ROLE.ADMIN },
+      },
+      {
+        path: "dashboard",
+        name: "Dashboard",
+        component: DashboardPage,
+        meta: { role: ROLE.ADMIN },
+      },
+      {
         path: "error",
         name: "Error",
         component: ErrorPage,
@@ -40,8 +57,7 @@ const routes = [
       { path: "", redirect: "/login" }
     ],
   },
-  { path: '/error', component: ErrorPage, props: true },
-  { path: "/:pathMatch(.*)*", redirect: "/login" },
+  { path: "/:pathMatch(.*)*", redirect: "/error" },
 ]
 
 const router = createRouter({

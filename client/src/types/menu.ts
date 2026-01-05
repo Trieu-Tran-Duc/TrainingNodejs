@@ -1,4 +1,10 @@
 export const menuItems = [
+   {
+    title: "Scanner",
+    icon: "mdi-camera",
+    to: "/scanner",
+    roles: ["admin", "user"],
+  },
   {
     title: "Dashboard",
     icon: "mdi-view-dashboard",
