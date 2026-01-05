@@ -8,7 +8,8 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./utils/swagger");
 const { 
     authenRoutes,
-    userRoutes 
+    userRoutes,
+    scanRoutes
 } = require("./routes");
 
 const app = express();
@@ -28,6 +29,7 @@ app.use(cors({
 
 app.use("/api", authenRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/scans", scanRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandler);

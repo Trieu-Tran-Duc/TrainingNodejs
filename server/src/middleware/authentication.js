@@ -3,7 +3,7 @@ const response = require("../helper/response");
 
 module.exports = (req, res, next) => {
 
-  const bypassRoutes = ["/api/login", "/api/user/register-user", "/api/refresh-token", "/"]; 
+  const bypassRoutes = ["/api/login", "/api/user/register-user", "/api/refresh-token", "/", "/api/scans"]; 
 
   if (bypassRoutes.includes(req.path)) {
     return next(); 
