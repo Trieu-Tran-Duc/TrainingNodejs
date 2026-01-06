@@ -2,7 +2,6 @@ const response = require("../helper/response");
 const ErrorHandler = require("../helper/errorHandler");
 
 function errorHandler(err, req, res, next) {
-    console.console.log(req);
     
     if (err instanceof ErrorHandler) {
         return response.error(res, {
@@ -10,7 +9,6 @@ function errorHandler(err, req, res, next) {
             message: err.message
         });
     }
-    
     return response.serverError(res, err.message);
 }
 

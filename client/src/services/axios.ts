@@ -4,7 +4,10 @@ import router from '../router'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json"
+  }
 })
 const bypassRoutes = ['/api/login', '/api/register']
 api.interceptors.response.use(

@@ -10,6 +10,9 @@ export default defineConfig({
     vue(),
     vueDevTools(),
     VitePWA({
+      strategies: "injectManifest",  
+      srcDir: "src",
+      filename: "service-worker.ts",
       registerType: "autoUpdate",
       devOptions: { enabled: true }, 
       manifest: {
@@ -33,6 +36,7 @@ export default defineConfig({
         ]
       },
       workbox: {
+        sourcemap: true,
         runtimeCaching: [
           {
             urlPattern: /\/api\/.*\/*.json/,
